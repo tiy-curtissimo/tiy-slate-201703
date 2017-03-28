@@ -14,7 +14,6 @@ lib-cov
 *.iml
 
 npm-debug.log
-node_modules
 coverage.html
 
 # config (get local from someone on your team if you need it)
