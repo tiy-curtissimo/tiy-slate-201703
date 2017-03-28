@@ -20,6 +20,10 @@ class Board {
     return this._state.every(x => x === 0);
   }
 
+  get state() {
+    return this._state.slice(0);
+  }
+
   get winner() {
     return this._columnWinner(0) ||
            this._columnWinner(1) ||
@@ -128,6 +132,15 @@ class TicTacToeGame {
 
   get winner() {
     return this.board.winner;
+  }
+
+  toJson() {
+    return JSON.stringify({
+      isOver: this.isOver(),
+      winner: this.winner || null,
+      humanFirst: this.humanFirst,
+      board: this._board.state
+    });
   }
 
   _letComputerMakeMove() {

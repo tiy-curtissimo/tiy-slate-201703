@@ -2,6 +2,22 @@ let TicTacToeGame = require('../src/tic-tac-toe-game'),
     expect = require('chai').expect;
 
 describe('Tic Tac Toe Game', () => {
+  it ('should return a JSONy object representation', () => {
+    let game = new TicTacToeGame();
+    game._board._state = [1, 2, 1,
+                          2, 0, 0,
+                          0, 2, 1];
+
+    let jsony = JSON.parse(game.toJson());
+
+    expect(jsony).to.deep.equal({
+      isOver: false,
+      winner: null,
+      humanFirst: true,
+      board: [1, 2, 1, 2, 0, 0, 0, 2, 1]
+    });
+  });
+
   it ('should record my move', () => {
     let game = new TicTacToeGame();
     let board = game.board;
