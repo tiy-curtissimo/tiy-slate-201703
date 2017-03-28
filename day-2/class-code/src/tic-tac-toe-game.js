@@ -24,6 +24,10 @@ class Board {
     return this._state.slice(0);
   }
 
+  set state(value) {
+    this._state = value;
+  }
+
   get winner() {
     return this._columnWinner(0) ||
            this._columnWinner(1) ||
@@ -106,6 +110,13 @@ class Singularity {
 }
 
 class TicTacToeGame {
+  static fromJson(json) {
+    let state = JSON.parse(json);
+    let game = new TicTacToeGame({ humanFirst: state.humanFirst });
+    game._board.state = state.board;
+    return game;
+  }
+
   constructor({ humanFirst: hf } = { humanFirst: true }) {
     this._humanIndex = hf ? 1 : 2;
     this._computerIndex = hf ? 2 : 1;
