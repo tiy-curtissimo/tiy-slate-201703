@@ -62,4 +62,75 @@ describe('Tic Tac Toe Game', () => {
 
     expect(board.isEmpty()).to.equal(true);
   });
+
+  it ('should not be empty after the first human move', () => {
+    let game = new TicTacToeGame();
+    let board = game.board;
+
+    game.play(0, 0);
+
+    expect(board.isEmpty()).to.equal(false);
+  });
+
+  it ('should not be empty after the first computer move', () => {
+    let game = new TicTacToeGame({ humanFirst: false });
+    let board = game.board;
+
+    expect(board.isEmpty()).to.equal(false);
+  });
+
+  it ('should not be over after a couple of moves', () => {
+    let game = new TicTacToeGame();
+
+    game.play(2, 1);
+
+    expect(game.isOver()).to.equal(false);
+    expect(game.winner).to.equal(undefined);
+  });
+
+  it ('should end when the board is full', () => {
+    let game = new TicTacToeGame();
+    game._board._state = [1, 1, 2,
+                          2, 2, 1,
+                          1, 0, 2];
+
+    game.play(2, 1);
+    expect(game.isOver()).to.equal(true);
+    expect(game.winner).to.equal(undefined);
+  });
+
+  it ('should end when the human wins', () => {
+    let game = new TicTacToeGame();
+    game._board._state = [1, 0, 2,
+                          1, 0, 2,
+                          0, 0, 0];
+
+    game.play(2, 0);
+
+    expect(game.isOver()).to.equal(true);
+    expect(game.winner).to.equal(1);
+  });
+
+  it ('should end when the computer wins', () => {
+    let game = new TicTacToeGame({ humanFirst: false });
+    game._board._state = [1, 1, 2,
+                          2, 1, 2,
+                          1, 0, 0 ];
+
+    game.play(2, 1);
+
+    expect(game.isOver()).to.equal(true);
+    expect(game.winner).to.equal(1);
+  });
+
+  it ('computer does not move after human wins', () => {
+    let game = new TicTacToeGame({ humanFirst: false });
+    game._board._state = [2, 2, 0,
+                          0, 0, 0,
+                          0, 0, 0 ];
+
+    game.play(0, 2);
+
+    expect(game._board._state.some(x => x === 1)).to.equal(false);
+  });
 });
