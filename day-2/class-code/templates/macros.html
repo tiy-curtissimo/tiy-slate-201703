@@ -1,0 +1,13 @@
+{% macro personalizedMessage(humanFirst) %}
+  A game where
+  {% if humanFirst %}
+    you
+  {% else %}
+    the computer
+  {% endif %}
+  went first!
+{% endmacro %}
+
+From inside macros, {{ personalizedMessage(false) }}?
+
+<h1>This is in my macros!</h1>

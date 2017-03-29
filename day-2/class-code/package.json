@@ -11,7 +11,8 @@
     "karma-local": "karma start karma.local.conf.js",
     "test": "npm run mocha",
     "test-local": "npm run mocha && npm run karma-local",
-    "gulp": "gulp"
+    "gulp": "gulp",
+    "nodemon": "nodemon server.js"
   },
   "repository": {
     "type": "git",

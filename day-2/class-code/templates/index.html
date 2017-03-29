@@ -1,0 +1,23 @@
+{% extends "parentTemplate.html" %}
+
+{% block ticTacToeRelatedMaterial %}
+  <code>{{ super() }}</code>
+
+  Hello {{ message }}, from <code>nunjucks</code>!<br>
+  We have {{ games | length }} games for you to play!
+
+  <!-- This renders HTML in the macros.html file -->
+  {% include "macros.html" %}
+
+  <!-- This allows variables and macros to be accessed in this file. -->
+  {% import "macros.html" as myMacros %}
+
+  <ul>
+  {% for game in games %}
+    <li>
+      <a href="/{{ loop.index0 }}">
+        {{ myMacros.personalizedMessage(game.humanFirst) }}</li>
+      </a>
+  {% endfor %}
+  </ul>
+{% endblock %}

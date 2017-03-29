@@ -1,0 +1,40 @@
+{% extends "parentTemplate.html" %}
+
+{% block ticTacToeRelatedMaterial %}
+<a href="/"><< Back</a>
+<font size="24">
+<center>
+{% if game.winner === 1 %}
+winner is {{ 'you' if game.humanFirst else 'the computer' }}
+{% elif game.winner === 2 %}
+loser is {{ 'you' if game.humanFirst else 'the computer' }}
+{% endif %}
+</center>
+<table border="2" align="center" width="200">
+  <caption>
+    X is {{ 'you' if game.humanFirst else 'the computer' }}
+  </caption>
+{% for row in range(3) %}
+<tr>
+  {% for col in range(3) %}
+    <td>
+      {% if game.board.whatsInThisSpace(row, col) === 1 %}
+        X
+      {% elif game.board.whatsInThisSpace(row, col) === 2 %}
+        O
+      {% elif not game.winner %}
+        <form method="POST" action="/{{ gameIndex }}">
+          <button width="50" height="50"><font size="24">??</font></button>
+          <input type="hidden" name="row" value="{{ row }}">
+          <input type="hidden" name="col" value="{{ col }}">
+        </form>
+      {% else %}
+        &nbsp;
+      {% endif %}
+    </td>
+  {% endfor %}
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
+</font>
