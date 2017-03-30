@@ -41,7 +41,8 @@ class TicTacToeGameRepository {
       game: new TicTacToeGame({ humanFirst })
     };
     return writefile(this._filename(desc), desc.game.toJson())
-      .then(() => this._descs.push(desc));
+      .then(() => this._descs.push(desc))
+      .then(() => desc);
   }
 
   update(desc) {
@@ -51,7 +52,7 @@ class TicTacToeGameRepository {
   destroy(desc) {
     return unlinkfile(this._filename(desc))
       .then(() => this._descs.findIndex(d => d.id === desc.id))
-      .then(i => this._descs = this._descs.splice(i, 1));
+      .then(i => this._descs.splice(i, 1));
   }
 
   _filename(desc) {

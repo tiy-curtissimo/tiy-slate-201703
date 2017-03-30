@@ -38,5 +38,11 @@ loser is {{ 'you' if game.humanFirst else 'the computer' }}
 </tr>
 {% endfor %}
 </table>
-{% endblock %}
 </font>
+<center>
+<form method="post" action="/{{ id }}">
+  <button>Delete</button>
+  <input type="hidden" name="X-HTTP-METHOD" value="delete">
+</form>
+</center>
+{% endblock %}
