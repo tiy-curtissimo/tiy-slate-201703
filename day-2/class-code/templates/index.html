@@ -13,11 +13,12 @@
   {% import "macros.html" as myMacros %}
 
   <ul>
-  {% for game in games %}
+  {% for desc in descs %}
     <li>
-      <a href="/{{ loop.index0 }}">
-        {{ myMacros.personalizedMessage(game.humanFirst) }}</li>
+      <a href="/{{ desc.id }}">
+        {{ myMacros.personalizedMessage(desc.game.humanFirst) }}
       </a>
+    </li>
   {% endfor %}
   </ul>
 {% endblock %}

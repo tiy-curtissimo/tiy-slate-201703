@@ -18,12 +18,13 @@ loser is {{ 'you' if game.humanFirst else 'the computer' }}
 <tr>
   {% for col in range(3) %}
     <td>
+      <center>
       {% if game.board.whatsInThisSpace(row, col) === 1 %}
         X
       {% elif game.board.whatsInThisSpace(row, col) === 2 %}
         O
       {% elif not game.winner %}
-        <form method="POST" action="/{{ gameIndex }}">
+        <form method="POST" action="/{{ id }}">
           <button width="50" height="50"><font size="24">??</font></button>
           <input type="hidden" name="row" value="{{ row }}">
           <input type="hidden" name="col" value="{{ col }}">
@@ -31,6 +32,7 @@ loser is {{ 'you' if game.humanFirst else 'the computer' }}
       {% else %}
         &nbsp;
       {% endif %}
+      </center>
     </td>
   {% endfor %}
 </tr>

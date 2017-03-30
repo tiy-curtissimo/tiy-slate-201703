@@ -1,10 +1,8 @@
 const path = './sandwich';
-let TicTacToeGame = require('./src/tic-tac-toe-game');
+let TicTacToeGameRepo = require('./src/tic-tac-toe-game-repo');
 let fs = require('fs');
 let BBPromise = require('bluebird');
 let bodyParser = require('body-parser');
-let readdir = BBPromise.promisify(fs.readdir);
-let readFile = BBPromise.promisify(fs.readFile);
 let expressFactoryFunction = require('express');
 let nunjucks = require('nunjucks');
 let globalGames = [];
@@ -23,43 +21,53 @@ app.use(function (req, res, next) {
   next(); // go to the next middleware
 });
 
+app.use(function (req, res, next) {
+  // if the X-HTTP-METHOD key exists
+  // in the request body, then set
+  // the method property of the
+  // request object to that value
+  // all uppercased.
+  next();
+});
+
 app.use(function (err, req, res, next) {
   console.error('something bad happened', req.path, err);
   next(err);
 });
 
-app.post('/:gameIndex', (req, res) => {
+app.post('/:id', (req, res) => {
   let { row, col } = req.body;
-  let gameIndex = req.params.gameIndex;
-  globalGames[gameIndex]
-    .play(Number.parseInt(row), Number.parseInt(col));
-  res.redirect(`/${gameIndex}`);
+  let desc = repo.get(req.params.id);
+  if (!desc) {
+    return req.redirect('/');
+  }
+  desc.game.play(Number.parseInt(row), Number.parseInt(col));
+  res.redirect(`/${req.params.id}`);
 });
 
-app.get('/:gameIndex', (req, res) => {
-  let gameIndex = req.params.gameIndex - 0;
-  if (Number.isNaN(gameIndex) || !globalGames[gameIndex]) {
+app.delete('/:gameIndex', (req, res) => {
+  // Delete the game.
+  res.redirect('/');
+});
+
+app.get('/:id', (req, res) => {
+  let desc = repo.get(req.params.id);
+  if (!desc) {
     return res.redirect('/');
   }
-  res.render('game.html', {
-    game: globalGames[gameIndex],
-    gameIndex: gameIndex
-  });
+  res.render('game.html', desc);
 });
 
 app.get('/', function (req, res) {
   res.render('index.html', {
     message: 'Hi, Max!',
-    games: globalGames
+    descs: repo.getAll()
   });
 });
 
-readdir(path)
-  .map(file => readFile(`${path}/${file}`, "utf-8"))
-  .map(gameJson => TicTacToeGame.fromJson(gameJson))
-  .then(gameList => {
-    let port = process.env.PORT || 8080;
-    globalGames = gameList;
-    app.listen(port, () => console.log('Listening to port 8080'));
-  })
-  .catch(err => console.log(err));
+let repo = new TicTacToeGameRepo();
+repo
+  .init()
+  .then(() => process.env.PORT || 8080)
+  .then(port => app.listen(port, () => console.log(`Listening to port ${port}`)))
+  .catch(console.error);
