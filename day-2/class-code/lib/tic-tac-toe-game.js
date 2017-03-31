@@ -1,3 +1,5 @@
+'use strict';
+
 class Board {
   constructor(empty) {
     this._empty = empty;
@@ -110,11 +112,22 @@ class Singularity {
 }
 
 class TicTacToeGame {
-  static fromJson(json) {
+  static fromJson(id, json) {
     let state = JSON.parse(json);
     let game = new TicTacToeGame({ humanFirst: state.humanFirst });
     game._board.state = state.board;
+
+    TicTacToeGame._maxId = Math.max(TicTacToeGame._maxId || -1, id);
+
     return game;
+  }
+
+  static getNextGameId() {
+    if (TicTacToeGame._maxId === undefined) {
+      TicTacToeGame._maxId = 0;
+    }
+    TicTacToeGame._maxId += 1;
+    return TicTacToeGame._maxId;
   }
 
   constructor({ humanFirst: hf } = { humanFirst: true }) {

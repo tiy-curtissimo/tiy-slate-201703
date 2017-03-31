@@ -19,7 +19,7 @@ class TicTacToeGameRepository {
         json: readfile(path.join(this._path, file), 'utf8')
       }))
       .map(({id, json}) => ({
-        game: TicTacToeGame.fromJson(json),
+        game: TicTacToeGame.fromJson(id, json),
         id: id
       }))
       .then(descs => this._descs = descs);
@@ -37,7 +37,7 @@ class TicTacToeGameRepository {
 
   create(humanFirst) {
     let desc = {
-      id: new Date().valueOf(),
+      id: TicTacToeGame.getNextGameId(),
       game: new TicTacToeGame({ humanFirst })
     };
     return writefile(this._filename(desc), desc.game.toJson())
